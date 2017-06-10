@@ -9,7 +9,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/fishing_lib" />
-            <option value="$PROJECT_DIR$/fishing_sample" />
+            <option value="$PROJECT_DIR$/fishing_sample2" />
+            <option value="$PROJECT_DIR$/fishing_sample3" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

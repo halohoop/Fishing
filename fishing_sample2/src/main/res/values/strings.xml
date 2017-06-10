@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">fishing_sample2</string>
+
+    <!--
+    无参无返回值
+    有参无返回值
+    无参有返回值
+    有参有返回值
+    -->
+
+    <string name="demo0">无参无返回值</string>
+    <string name="demo1">有参无返回值</string>
+    <string name="demo2">无参有返回值</string>
+    <string name="demo3">有参有返回值</string>
+</resources>

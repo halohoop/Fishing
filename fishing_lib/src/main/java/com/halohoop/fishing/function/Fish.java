@@ -16,6 +16,6 @@ public abstract class Fish {
 
     public Fish(String lakeTag, String name) {
         this.name = name;
-        Fishing.getDefault().put(lakeTag, name, this);
+        Fishing.getDefault().putFish(lakeTag, name, this);
     }
 }

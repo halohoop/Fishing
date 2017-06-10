@@ -1,1 +1,1 @@
-include ':fishing_lib', ':fishing_sample'
+include ':fishing_lib', ':fishing_sample2', ':fishing_sample3'

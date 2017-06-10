@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_settings0"
+        android:title="无参无返回值demo"/>
+    <item android:id="@+id/action_settings1"
+        android:title="有参无返回值demo"/>
+    <item android:id="@+id/action_settings2"
+        android:title="无参有返回值demo"/>
+    <item android:id="@+id/action_settings3"
+        android:title="有参有返回值demo"/>
+
+    <!--
+    无参无返回值
+    有参无返回值
+    无参有返回值
+    有参有返回值
+    -->
+</menu>

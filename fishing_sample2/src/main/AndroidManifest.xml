@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.halohoop.fishing_sample2">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".demo0.Demo0Act"
+            android:label="@string/demo0"></activity>
+        <activity
+            android:name=".demo1.Demo1Act"
+            android:label="@string/demo1"></activity>
+        <activity
+            android:name=".demo2.Demo2Act"
+            android:label="@string/demo2"></activity>
+        <activity
+            android:name=".demo3.Demo3Act"
+            android:label="@string/demo3"></activity>
+    </application>
+
+</manifest>

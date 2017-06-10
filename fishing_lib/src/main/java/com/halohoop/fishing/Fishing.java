@@ -9,7 +9,7 @@ import com.halohoop.fishing.executor.FishHandler;
 import com.halohoop.fishing.executor.FishMovement;
 import com.halohoop.fishing.function.Fish;
 import com.halohoop.fishing.widget.FishPond;
-import com.halohoop.fishing.widget.Lake;
+import com.halohoop.fishing.widget.Pond;
 
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -50,68 +50,90 @@ public class Fishing {
         }
     }
 
-    public void put(String lakeTag, String name, Fish fish) {
+    public void putFish(String pondTag, String name, Fish fish) {
         if (mFishPondMap != null) {
-            FishPond fishPond = mFishPondMap.get(lakeTag);
+            FishPond fishPond = mFishPondMap.get(pondTag);
             if (fishPond != null) {
                 fishPond.put(name, fish);
             }
         }
     }
 
-    public FishPond put(String lakeTag, FishPond fishPond) {
+    public FishPond getFishPond(String pondTag){
+        if (mFishPondMap != null) {
+            FishPond fishPond = mFishPondMap.get(pondTag);
+            return fishPond;
+        }
+        return null;
+    }
+
+    public FishPond putFishPond(String pondTag, FishPond fishPond) {
         if (mFishPondMap == null) {
             mFishPondMap = new ArrayMap<>();
         }
-        return mFishPondMap.put(lakeTag, fishPond);
+        return mFishPondMap.put(pondTag, fishPond);
     }
 
-    public void remove(String lakeTag) {
-        if (mFishPondMap != null) {
-            FishPond remove = mFishPondMap.remove(lakeTag);
-            if (remove!=null) {
-                if (remove.getMapNoParamNoReturn() != null) {
-                    remove.getMapNoParamNoReturn().clear();
-                }
-                if (remove.getMapWithParamNoReturn() != null) {
-                    remove.getMapWithParamNoReturn().clear();
-                }
-                if (remove.getMapNoParamWithReturn() != null) {
-                    remove.getMapNoParamWithReturn().clear();
-                }
-                if (remove.getMapWithParamWithReturn() != null) {
-                    remove.getMapWithParamWithReturn().clear();
+    public void unbindPond(Object po) {
+        if (po instanceof Pond) {
+            Pond pond = (Pond) po;
+            if (mFishPondMap != null) {
+                FishPond remove = mFishPondMap.remove(pond.getTag());
+                if (remove != null) {
+                    if (remove.getMapNoParamNoReturn() != null) {
+                        remove.getMapNoParamNoReturn().clear();
+                    }
+                    if (remove.getMapWithParamNoReturn() != null) {
+                        remove.getMapWithParamNoReturn().clear();
+                    }
+                    if (remove.getMapNoParamWithReturn() != null) {
+                        remove.getMapNoParamWithReturn().clear();
+                    }
+                    if (remove.getMapWithParamWithReturn() != null) {
+                        remove.getMapWithParamWithReturn().clear();
+                    }
                 }
             }
         }
     }
 
-    public void bindLake(Object lak) {
-        if (lak instanceof Lake) {
-            Lake lake = (Lake) lak;
-            if (TextUtils.isEmpty(lake.getTag())) {
-                throw new RuntimeException("Please offer a unique tag to your lake!");
+
+    public void bindPond(Object po) {
+        if (po instanceof Pond) {
+            Pond pond = (Pond) po;
+            if (TextUtils.isEmpty(pond.getTag())) {
+                throw new RuntimeException("Please offer a unique tag to your pond!");
             }
-            String tag = lake.getTag();
-            Fish[] fish = lake.fishCreator();
+            FishPond fishPond = getFishPond(pond.getTag());
+            if (fishPond != null) {
+                return;
+            }
+            String tag = pond.getTag();
+            Fish[] fish = pond.fishCreator();
             if (fish != null && fish.length > 0) {
-                Fishing.getDefault().put(tag, new FishPond());
+                putFishPond(tag, new FishPond());
                 for (int i = 0; i < fish.length; i++) {
-                    Fishing.getDefault().put(tag, fish[i].getName(), fish[i]);
+                    putFish(tag, fish[i].getName(), fish[i]);
                 }
             }
         } else {
-            throw new RuntimeException(lak.getClass().getSimpleName() + " must implement Lake!");
+            throw new RuntimeException(po.getClass().getSimpleName() + " must implement Pond!");
         }
     }
 
     //-----------------No return-------------------------
-    private <P> void castNoReturn(String lakeTag, String name, P p, boolean isUseThread, int type) {
-        FishPond fishPond = mFishPondMap.get(lakeTag);
+    private <P> void castNoReturn(String pondTag, String name, P p, boolean isUseThread, int type) {
+        if (mFishPondMap == null) {
+            return;
+        }
+        FishPond fishPond = mFishPondMap.get(pondTag);
         if (fishPond == null) {
             return;
         }
         FishMovement fishMovement = fishPond.getFishMovement(type);
+        if (fishMovement == null) {
+            return;
+        }
         if (!isUseThread) {
             fishMovement.execute(name, p, null);
         } else {
@@ -129,26 +151,26 @@ public class Fishing {
 
     //------------------------------------------
     //-----------------No param no return-------------------------
-    public void castNpnr(String lakeTag, String name) {
+    public void castNpnr(String pondTag, String name) {
         int type = FishPond.TYPE_NO_PARAM_NO_RTN;
-        castNoReturn(lakeTag, name, null, false, type);
+        castNoReturn(pondTag, name, null, false, type);
     }
 
-    public void castNpnrInThread(String lakeTag, String name) {
+    public void castNpnrInThread(String pondTag, String name) {
         int type = FishPond.TYPE_NO_PARAM_NO_RTN;
-        castNoReturn(lakeTag, name, null, true, type);
+        castNoReturn(pondTag, name, null, true, type);
     }
 
     //------------------------------------------
     //-----------------With param no return-------------------------
-    public <P> void castWpnr(String lakeTag, String name, P p) {
+    public <P> void castWpnr(String pondTag, String name, P p) {
         int type = FishPond.TYPE_WITH_PARAM_NO_RTN;
-        castNoReturn(lakeTag, name, p, false, type);
+        castNoReturn(pondTag, name, p, false, type);
     }
 
-    public <P> void castWpnrInThread(String lakeTag, String name, P p) {
+    public <P> void castWpnrInThread(String pondTag, String name, P p) {
         int type = FishPond.TYPE_WITH_PARAM_NO_RTN;
-        castNoReturn(lakeTag, name, p, true, type);
+        castNoReturn(pondTag, name, p, true, type);
     }
     //------------------------------------------
 
@@ -156,12 +178,15 @@ public class Fishing {
     //==============================================
 
     //-----------------With return-------------------------
-    private <R, P> void castWithReturn(String lakeTag, String name, P p,
+    private <R, P> void castWithReturn(String pondTag, String name, P p,
                                        boolean isUseThread,
                                        boolean isCallbackAtUIThread,
                                        FishHandler<R> callback, Class<R> clz,
                                        int type) {
-        FishPond fishPond = mFishPondMap.get(lakeTag);
+        if (mFishPondMap==null) {
+            return;
+        }
+        FishPond fishPond = mFishPondMap.get(pondTag);
         if (fishPond == null) {
             return;
         }
@@ -200,10 +225,10 @@ public class Fishing {
 
     //------------------------------------------
     //-----------------No param With return-------------------------
-    public <P, R> void castNpwr(String lakeTag, String name,
+    public <P, R> void castNpwr(String pondTag, String name,
                                 FishHandler<R> callback, Class<R> clz) {
         int type = FishPond.TYPE_NO_PARAM_WITH_RTN;
-        castWithReturn(lakeTag, name, null, false,
+        castWithReturn(pondTag, name, null, false,
                 true, callback,
                 clz, type);
     }
@@ -219,17 +244,17 @@ public class Fishing {
 
     //------------------------------------------
     //-----------------With param With return-------------------------
-    public <P, R> void castWpwr(String lakeTag, String name, P p,
+    public <P, R> void castWpwr(String pondTag, String name, P p,
                                 FishHandler<R> callback, Class<R> clz) {
         int type = FishPond.TYPE_WITH_PARAM_WITH_RTN;
-        castWithReturn(lakeTag, name, p, false, true, callback, clz, type);
+        castWithReturn(pondTag, name, p, false, true, callback, clz, type);
     }
 
-    public <P, R> void castWpwrInThread(String lakeTag, String name, P p,
+    public <P, R> void castWpwrInThread(String pondTag, String name, P p,
                                         boolean isCallbackAtUIThread,
                                         FishHandler<R> callback, Class<R> clz) {
         int type = FishPond.TYPE_WITH_PARAM_WITH_RTN;
-        castWithReturn(lakeTag, name, p, true, isCallbackAtUIThread, callback, clz, type);
+        castWithReturn(pondTag, name, p, true, isCallbackAtUIThread, callback, clz, type);
     }
     //------------------------------------------
 
