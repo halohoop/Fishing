@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Fishing.iml" filepath="$PROJECT_DIR$/Fishing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fishing_lib/fishing_lib.iml" filepath="$PROJECT_DIR$/fishing_lib/fishing_lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fishing_sample/fishing_sample.iml" filepath="$PROJECT_DIR$/fishing_sample/fishing_sample.iml" />
+    </modules>
+  </component>
+</project>
