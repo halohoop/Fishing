@@ -5,12 +5,20 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
 
+    def buildDataTime = project.hasProperty('haloDevBuild')? 77 : new Date().format('yyMMddHHmm').toInteger()
+
+    //tip 1:
+    if(projects.hasProperty('haloDevBuild')){
+        splits.abi.enable = false;
+        splits.density.enable = false;
+        aaptOptions.cruncherEnabled = false
+    }
 
     defaultConfig {
         applicationId "com.halohoop.fishing_sample3"
         minSdkVersion 11
         targetSdkVersion 25
-        versionCode 1
+        versionCode buildDataTime
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -20,6 +28,15 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "dev"
+    productFlavors {
+        development {
+            dimension "dev"
+            minSdkVersion 21
+            resConfigs "en", "xxhdpi"
         }
     }
 }
